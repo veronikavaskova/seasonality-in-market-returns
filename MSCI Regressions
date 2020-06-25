@@ -1,0 +1,120 @@
+# import libraries
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+from datetime import datetime
+import seaborn as sns
+
+%matplotlib inline
+
+# Create the pd.ExcelFile() object
+xls = pd.ExcelFile(r'/Users/veronikavaskova/Downloads/Dataset.xlsx')
+
+# Extract the sheet names from xls
+exchanges = xls.sheet_names
+
+# Create an empty list
+countries = []
+
+# Import the data
+for exchange in exchanges:
+    country = pd.read_excel(xls, sheet_name=exchange)
+    countries.append(country)
+
+# Clean the data 
+for element in countries:
+    element.drop(element.head(1).index,inplace=True) # drop first row
+    element.drop(element.tail(1).index, inplace=True) # drop last row
+    element.drop(['Close'], axis = 1, inplace=True) # drop 'Close' column
+    element.index = pd.to_datetime(element['Exchange_Date']) # set "Exchange Date" column as datetime index
+    element = element.drop(['Exchange_Date'], axis = 1, inplace=True) # remove redundant column
+    
+# Store regression results in a list.
+results = {}
+
+# Run regression for countries, itterate and generate the putput for each model, print all regression results with name and their parameters.
+for x in range(len(countries)):
+    results[x] = smf.ols(formula="Monthly_Return ~ Season_Dummy", data=countries[x]).fit()
+    print('Coefficients:', results[x].params)
+    print('Dummy t-value:', results[x].tvalues['Season_Dummy'])
+    print('Dummy p-value:', results[x].pvalues['Season_Dummy'])
+    print('Regression Summary:', results[x].summary())
+
+# Make lists for results loop
+mean = {}
+pval = {}
+tval = {}
+sd_return = {}
+coefficient_dummy = {}
+
+# Loop results into a list
+for x in range(len(countries)):
+    mean[x] = countries[x]["Monthly_Return"].mean() # Sample Mean
+    coefficient_dummy[x] = results[x].params['Season_Dummy'] # Coefficient for independent (dummy) variable
+    pval[x] = results[x].pvalues['Season_Dummy'] # p values for dummy
+    tval[x] = results[x].tvalues['Season_Dummy'] # t values for dummy
+    sd_return[x] = countries[x]['Monthly_Return'].std() # standard deviation
+    
+# Country names for overview table index
+#countrynames = ['Australia', 'Austria', 'Belgium', 'Canada', 'Denmark', 'France', 'Germany', 'Hong Kong', 'Ireland' ,'Italy', 'Japan', 'Netherlands', 'Norway', 'Singapore', 'South Africa', 'Spain', 'Switzerland', 'Argentina', 'UK', 'US', 'Brazil', 'Chile', 'Finland', 'Greece', 'Indonesia', 'Jordan', 'Korea', 'Malaysia', 'Mexico', 'New Zealand', 'Philippines', 'Portugal', 'Russia', 'Taiwan', 'Thailand', 'Turkey']
+exchanges
+
+# Stats for overview table
+meandf = pd.DataFrame(list(mean.items()), columns=['Country', 'Mean'])
+coeffdf = pd.DataFrame(list(coefficient_dummy.items()), columns=['Country', '\u03B1']) # unicode is for alpha
+pvaldf = pd.DataFrame(list(pval.items()), columns=['Country', 'p-Value'])
+tvaldf = pd.DataFrame(list(tval.items()), columns=['Country', 't-Value'])
+sd_returndf = pd.DataFrame(list(sd_return.items()), columns=['Country', 'Standard Deviation'])
+countriesdf = exchanges
+
+# Concatenate the lists into 1 table, remove duplicate 'country' tables
+table = pd.concat([meandf, coeffdf, sd_returndf, pvaldf, tvaldf], axis=1)
+table = table.loc[:,~table.columns.duplicated()]
+
+# Setting countries as index column
+table['Country'] = countriesdf
+table.set_index(['Country'], inplace=True)
+table
+
+### This section does the necessary adjustments so that May-October returns can be displayed alongside November-April returns in one table.
+## Part 1 - November-April returns.
+# Lists for cleaned data storage
+countriesmonth = {}
+countriesmonthaverage = {}
+
+# Cleaning the country data - dropping Season_Dummy column and selecting months 1,2,3,4,11,12 (January, February, March, April, November, December) by index, storing new dataframes in list
+for x in range(len(countries)):
+    countries[x].drop(['Season_Dummy'], axis = 1, inplace=True) # drop 'Season_Dummy' column
+    countriesmonth[x] = countries[x][countries[x].index.month.isin([1,2,3,4,11,12])] # Select the relevant months
+    
+# Average for the November-April returns
+for x in range(len(countriesmonth)):
+    countriesmonthaverage[x] = countriesmonth[x].mean()
+    
+# New dataframe wiht average returns of 2002 - 2018 November-April Months.
+dfnovemberapril = pd.DataFrame.from_dict(countriesmonthaverage, orient='index') # Making DataFrame wiht the averages for November-April
+dfnovemberapril.index = exchanges
+dfnovemberapril.columns = ['November-April'] # Renaming column
+
+## Part 2 - same for May-October
+countries_mayoctober = {}
+countries_mayoctober_avg= {}
+
+# Selecting relevant months (5,6,7,8,9,10) - May, June, July, August, September, October
+for x in range(len(countries)):
+    #Note 'Season_Dummy' column is already dropped in Part 1.
+    countries_mayoctober[x] = countries[x][countries[x].index.month.isin([5,6,7,8,9,10])]
+
+# Average for the May-October returns
+for x in range(len(countries_mayoctober)):
+    countries_mayoctober_avg[x] = countries_mayoctober[x].mean()
+    
+# New dataframe with average returns of 2002 - 2018 May-October Months.
+df_mayoctober_avg = pd.DataFrame.from_dict(countries_mayoctober_avg, orient='index')
+df_mayoctober_avg.index = exchanges
+df_mayoctober_avg.columns = ['May-October'] # Renaming column
+
+# Dataframe of May-October returns and November-April returns.
+df_monthaveragecomparison = pd.concat([df_mayoctober_avg, dfnovemberapril], axis = 1)
+
+df_monthaveragecomparison

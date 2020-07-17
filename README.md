@@ -10,15 +10,6 @@ The results produced are:
 
 - A table which demonstrates November-April returns (average per country) against May-October returns (average per country). Further highlights November-April as a more profitable period.
 
-Attempt | #1 | #2 | #3 | #4 | #5 | #6 | #7 | #8 | #9 | #10 | #11
---- | --- | --- | --- |--- |--- |--- |--- |--- |--- |--- |---
-Seconds | 301 | 283 | 290 | 286 | 289 | 285 | 287 | 287 | 272 | 276 | 269
-
-	| May-October |	November-April
-  --- | --- | --- |
-Australia |	0.445654	0.916678
-Austria |	-0.244187	1.363820
-
 
 |  | May-October  | November-April  |
 | :---:   | :-: | :-: |

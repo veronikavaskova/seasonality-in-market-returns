@@ -4,7 +4,6 @@ import numpy as np
 import statsmodels.formula.api as smf
 from datetime import datetime
 import seaborn as sns
-
 %matplotlib inline
 
 # Create the pd.ExcelFile() object

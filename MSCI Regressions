@@ -8,7 +8,7 @@ import seaborn as sns
 %matplotlib inline
 
 # Create the pd.ExcelFile() object
-xls = pd.ExcelFile(r'/Users/veronikavaskova/Downloads/Dataset.xlsx')
+xls = pd.ExcelFile(r'PATH TO FILE')
 
 # Extract the sheet names from xls
 exchanges = xls.sheet_names
@@ -29,7 +29,7 @@ for element in countries:
     element.index = pd.to_datetime(element['Exchange_Date']) # set "Exchange Date" column as datetime index
     element = element.drop(['Exchange_Date'], axis = 1, inplace=True) # remove redundant column
     
-# Store regression results in a list.
+# Prepare list to store regression results.
 results = {}
 
 # Run regression for countries, itterate and generate the putput for each model, print all regression results with name and their parameters.

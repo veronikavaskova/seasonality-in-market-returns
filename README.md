@@ -56,3 +56,4 @@ Turkey	1.438996	1.407835
 |  | May-Ocotber  | November-April  |
 | :---:   | :-: | :-: |
 | Australia | 0.445654 | 0.916678 |
+|Austria | -0.244187 | 1.363820 |

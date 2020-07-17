@@ -4,7 +4,7 @@ The data indicates satistical significance (p => 10%) in 7 countries; Austria, D
 
 The results produced are: 
 
-- 36 regressions: for each country in the sample. Monthly returns are regressed against a dummy variable (1 if month is November-April and 0 if month is May-October)
+- 36 regressions: for each country in the sample. Monthly returns are regressed against a dummy variable (1 if month is November-April and 0 if month is May-October).
 
 - A table with relevant results, displayed by country.
 

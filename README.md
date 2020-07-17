@@ -53,6 +53,6 @@ Taiwan	0.396134	0.810293
 Thailand	0.801917	1.810490
 Turkey	1.438996	1.407835
 
-| Attempt | #1  | #2  |
+|  | May-Ocotber  | November-April  |
 | :---:   | :-: | :-: |
-| Seconds | 301 | 283 |
+| Australia | 0.445654 | 0.916678 |

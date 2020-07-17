@@ -9,3 +9,7 @@ The results produced are:
 - A table with relevant results, displayed by country.
 
 - A table which demonstrates November-April returns (average per country) against May-October returns (average per country). Further highlights November-April as a more profitable period.
+
+Attempt | #1 | #2 | #3 | #4 | #5 | #6 | #7 | #8 | #9 | #10 | #11
+--- | --- | --- | --- |--- |--- |--- |--- |--- |--- |--- |---
+Seconds | 301 | 283 | 290 | 286 | 289 | 285 | 287 | 287 | 272 | 276 | 269

@@ -8,7 +8,7 @@ The results produced are:
 
 - A table with relevant results, displayed by country.
 
-- A table which demonstrates November-April returns (average per country) against May-October returns (average per country). Further highlights November-April as a more profitable period.
+- A table which demonstrates November-April returns changes in percentage (average per country for the period) against May-October returns (average per country for the period). Further highlights November-April as a more profitable.
 
 
 |  | May-October  | November-April  |
